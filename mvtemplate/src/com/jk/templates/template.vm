@@ -1,0 +1,48 @@
+#!/bin/bash
+###############################################################################
+#                               Documentation                                 #
+###############################################################################
+#                                                                             #
+# Description                                                                 #
+#     : 
+#                                                                             #
+#                                                                             #
+#                                                                             #
+###############################################################################
+#                           Identify Script Home                              #
+###############################################################################
+#Find the script file home
+pushd . > /dev/null
+SCRIPT_DIRECTORY="${BASH_SOURCE[0]}";
+while([ -h "${SCRIPT_DIRECTORY}" ]);
+do
+  cd "`dirname "${SCRIPT_DIRECTORY}"`"
+  SCRIPT_DIRECTORY="$(readlink "`basename "${SCRIPT_DIRECTORY}"`")";
+done
+cd "`dirname "${SCRIPT_DIRECTORY}"`" > /dev/null
+SCRIPT_DIRECTORY="`pwd`";
+popd  > /dev/null
+MODULE_HOME="`dirname "${SCRIPT_DIRECTORY}"`"
+###############################################################################
+#                           Import Dependencies                               #
+###############################################################################
+
+#Load common dependencies
+. ${MODULE_HOME}/bin/constants.sh
+. ${MODULE_HOME}/bin/log-functions.sh
+. ${MODULE_HOME}/bin/common-functions.sh
+. ${MODULE_HOME}/bin/hadoop-functions.sh 
+. ${MODULE_HOME}/bin/omnich-functions.sh
+
+###############################################################################
+#                                KMM                                          #
+###############################################################################
+
+fn_run_kpi_pig "${MODULE_HOME}" \
+    "${MODULE_HOME}/etc/pig/$name .properties" \
+    "${MODULE_HOME}/pig/$name .pig" \
+    "${mvn.environment.prefix}db_work.${mvn.environment.prefix}$name"
+
+###############################################################################
+#                                     End                                     #
+###############################################################################
